@@ -1,4 +1,10 @@
-# Hasil Testing Tugas Pertemuan 10 - Migration & Model Kategori
+# Tugas Pertemuan 11
 
-![Hasil Eksekusi Terminal](screenshot/tugas10.png)
-![Hasil](<screenshot/tugas 10.png>)
+## Tugas 1: Halaman Dashboard
+![Dashboard](<screenshot/dashboard11.png>)
+
+## Tugas 2: Blade Component (Card Buku)
+![Buku Full](<screenshot/cardbuku11png>)
+
+## Tugas 3: Fitur Search & Filter Advanced
+![Buku Filter](<screenshot/search11.png>)
