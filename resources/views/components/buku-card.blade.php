@@ -25,16 +25,25 @@
         </div>
     </div>
 
-    @if($showActions)
-    <div class="card-footer bg-transparent border-top-0 pb-3">
-        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-sm btn-outline-info">
-                <i class="bi bi-eye"></i> Detail
-            </a>
-            <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-sm btn-outline-warning">
-                <i class="bi bi-pencil"></i> Edit
-            </a>
-        </div>
+    <div class="btn-group-vertical d-grid gap-2">
+        <a href="{{ route('buku.show', $buku->id) }}" class="btn btn-sm btn-info text-white">
+            <i class="bi bi-eye"></i> Detail
+        </a>
+        <a href="{{ route('buku.edit', $buku->id) }}" class="btn btn-sm btn-warning">
+            <i class="bi bi-pencil"></i> Edit
+        </a>
+        
+    {{-- Delete Button dengan SweetAlert --}}
+    <form action="{{ route('buku.destroy', $buku->id) }}" 
+        method="POST" 
+        class="d-inline delete-form">
+        @csrf
+        @method('DELETE')
+        <button type="button" class="btn btn-sm btn-danger w-100 btn-delete" 
+                data-judul="{{ $buku->judul }}">
+            <i class="bi bi-trash"></i> Hapus
+        </button>
+    </form>
+
     </div>
-    @endif
 </div>

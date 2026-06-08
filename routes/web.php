@@ -12,8 +12,12 @@ Route::get('/', function () {
 Route::get('/buku/search', [App\Http\Controllers\BukuController::class, 'search'])->name('buku.search');
 
 // Resource route untuk Buku
+Route::post('/buku/bulk-delete', [App\Http\Controllers\BukuController::class, 'bulkDelete'])->name('buku.bulk-delete');
+// Route untuk Export CSV Buku
+Route::get('/buku/export', [\App\Http\Controllers\BukuController::class, 'export'])->name('buku.export');
+
 Route::resource('buku', BukuController::class);
- 
+
 // Custom route untuk filter kategori
 Route::get('/buku/kategori/{kategori}', [BukuController::class, 'filterKategori'])
      ->name('buku.kategori');

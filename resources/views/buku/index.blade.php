@@ -11,6 +11,10 @@
     <a href="{{ route('buku.create') }}" class="btn btn-primary">
         <i class="bi bi-plus-circle"></i> Tambah Buku
     </a>
+    
+    <a href="{{ route('buku.export') }}" class="btn btn-success">
+        <i class="bi bi-download"></i> Export CSV
+    </a>
 </div>
  
 {{-- Statistik Cards --}}
@@ -139,15 +143,39 @@
     </div>
 </div>
 
-@forelse ($bukus as $buku)
-    
-    <x-buku-card :buku="$buku" />
+<!-- Form Bulk Delete -->
+<form action="{{ route('buku.bulk-delete') }}" method="POST" id="bulk-delete-form">
+    @csrf
+</form>
 
+<!-- Tombol Select All & Hapus -->
+<div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+    <div class="form-check">
+        <input type="checkbox" id="select-all" class="form-check-input border-dark">
+        <label class="form-check-label fw-bold" for="select-all">Pilih Semua Buku</label>
+    </div>
+    <!-- Perhatikan tambahan form="bulk-delete-form" di bawah ini -->
+    <button type="submit" form="bulk-delete-form" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus semua buku yang dipilih?')">
+        <i class="bi bi-trash"></i> Hapus Terpilih
+    </button>
+</div>
+
+<!-- Looping Data Buku  -->
+@forelse ($bukus as $buku)
+    <div class="mb-3">
+        <!-- Checkbox untuk tiap buku. Perhatikan tambahan form="bulk-delete-form" -->
+        <div class="form-check mb-2">
+            <input class="form-check-input border-dark" type="checkbox" name="buku_ids[]" value="{{ $buku->id }}" id="check-{{ $buku->id }}" form="bulk-delete-form">
+            <label class="form-check-label text-muted small" for="check-{{ $buku->id }}">Tandai buku ini</label>
+        </div>
+        
+        <!-- Card Buku bawaan -->
+        <x-buku-card :buku="$buku" /> 
+    </div>
 @empty
     <div class="alert alert-info">
-        <i class="bi bi-info-circle"></i>
-        Tidak ada data buku
-        ```
+        <i class="bi bi-info-circle"></i> Tidak ada data buku
+    </div>
 @endforelse
  
 @if ($bukus->count() > 0)
@@ -160,4 +188,40 @@
         </p>
     </div>
 @endif
+
+@push('scripts')
+<script>
+    // Script Select All Checkbox
+    document.getElementById('select-all').addEventListener('change', function() {
+        document.querySelectorAll('input[name="buku_ids[]"]').forEach(cb => {
+            cb.checked = this.checked;
+        });
+    });
+
+    // SweetAlert confirmation untuk delete
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const judul = this.getAttribute('data-judul');
+
+            Swal.fire({
+                title: 'Konfirmasi Hapus',
+                text: `Apakah Anda yakin ingin menghapus buku "${judul}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
+
 @endsection
